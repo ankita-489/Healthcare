@@ -1,0 +1,334 @@
+{
+  "info": {
+    "_postman_id": "b3e0984a-9b12-4217-a068-healthcare-backend",
+    "name": "Healthcare Backend API",
+    "description": "Complete Postman collection for Healthcare Backend (Node.js, Express, PostgreSQL, Sequelize, JWT)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "patientId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "doctorId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "mappingId",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dr. Jane Doe\",\n  \"email\": \"jane.doe@example.com\",\n  \"password\": \"SecurePass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register/",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register", ""]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "    pm.collectionVariables.set('token', res.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"jane.doe@example.com\",\n  \"password\": \"SecurePass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login/",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Patients",
+      "item": [
+        {
+          "name": "Create Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Robert Smith\",\n  \"age\": 42,\n  \"gender\": \"Male\",\n  \"contact\": \"+1-555-0199\",\n  \"address\": \"742 Evergreen Terrace\",\n  \"medicalHistory\": \"Type 2 Diabetes, Mild Hypertension\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", ""]
+            }
+          }
+        },
+        {
+          "name": "Get All Patients",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/patients/",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Patient By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Patient",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"age\": 43,\n  \"medicalHistory\": \"Type 2 Diabetes, Mild Hypertension, Managed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Patient",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Doctors",
+      "item": [
+        {
+          "name": "Create Doctor",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dr. Meredith Grey\",\n  \"specialization\": \"General Surgery\",\n  \"email\": \"meredith.grey@hospital.org\",\n  \"phone\": \"+1-555-0144\",\n  \"experienceYears\": 12\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/doctors/",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", ""]
+            }
+          }
+        },
+        {
+          "name": "Get All Doctors",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/doctors/",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Doctor By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/doctors/{{doctorId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "{{doctorId}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Doctor",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"experienceYears\": 13,\n  \"phone\": \"+1-555-0145\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/doctors/{{doctorId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "{{doctorId}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Doctor",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/doctors/{{doctorId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "{{doctorId}}", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Patient-Doctor Mappings",
+      "item": [
+        {
+          "name": "Assign Doctor to Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientId\": 1,\n  \"doctorId\": 1,\n  \"notes\": \"Assigned for pre-op consultation\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/mappings/",
+              "host": ["{{baseUrl}}"],
+              "path": ["mappings", ""]
+            }
+          }
+        },
+        {
+          "name": "Get All Mappings",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mappings/",
+              "host": ["{{baseUrl}}"],
+              "path": ["mappings", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Doctors by Patient ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mappings/{{patientId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["mappings", "{{patientId}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Mapping",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mappings/{{mappingId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["mappings", "{{mappingId}}", ""]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
